@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/tapsiturbi/ui5-typescript-model-generator/issues"
   },
-  "homepage": "https://github.com/tapsiturbi/ui5-typescript-model-generator#readme"
+  "homepage": "https://github.com/tapsiturbi/ui5-typescript-model-generator#readme",
+  "dependencies": {
+    "through2": "^3.0.1",
+    "typescript": "^3.9.5"
+  }
 }
