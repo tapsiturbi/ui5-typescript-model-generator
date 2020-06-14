@@ -1,6 +1,6 @@
 {
   "name": "ui5-typescript-model-generator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Gulp task that generates typescript code for SAPUI5/OpenUI5 model classes.",
   "main": "index.js",
   "scripts": {
