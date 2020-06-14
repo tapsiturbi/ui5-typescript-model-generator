@@ -53,299 +53,207 @@ export default abstract class ViewJSONModel<T extends ViewJSONModelData> extends
 This will get all `.ts` files on your src/models directory and get those that have `ViewJSONModel` as the parent class. So for example, if you have the following model class:
 
 ```
-    export interface HomeViewJSONModelData {
-        /** boolean flag that will be true if this view is waiting for data to load */
-        loading: boolean,
+    export interface EmployeeListViewJSONModelData {
 
-        numDigits: Number,
-        maxNumbers: Number,
+        /** json object containing the loading flags on different instances */
+        loading: {
 
-        result: Number[],
+            /** flag that becomes true if changing pages */
+            pagination: boolean,
 
-        date?: Date,
-        multiLevelData?: {
-            key: string,
-            obj: { num: number, str: string },
-            valueList: {
-                id: string,
-                value: string
+            /**
+            * flag that becomes whenever any ajax call is made
+            */
+            all: boolean
+        },
+
+        employees: {
+            /** first name of employee */
+            firstName: string,
+
+            /**
+            * last name
+            */
+            lastName: string,
+
+            /** unique User ID */
+            userId: string,
+
+            lastLoginDate: Date,
+
+            emailAddresses: {
+                email: string,
+                type: "personal"|"work",
+                isPrimary: boolean
             }[]
-        }
+        }[]
     }
 
     /**
-    * Base class to use as JSONModel.
+    * JSONModel used on EmployeeList view.
     *
-    * @name spinifex.webdemo.models.HomeViewJSONModel
+    * @name spinifex.webdemo.models.EmployeeListViewJSONModel
     */
-    export default class HomeViewJSONModel extends ViewJSONModel<HomeViewJSONModelData> {}
+    export default class EmployeeListViewJSONModel extends ViewJSONModel<EmployeeListViewJSONModelData> {}
 ```
 
 
-This code generator will add the following methods inside HomeViewJSONModel:
+This code generator will add the following methods inside EmployeeListViewJSONModel:
 ```
     //-- AUTO GENERATED (DO NOT EDIT BELOW) ---------------
     //#region Auto generated code
     //-----------------------------------------------------------------------------------
-    // Auto generated functions based from HomeViewJSONModelData for use in OpenUI5
+    // Auto generated functions based from EmployeeListViewJSONModelData for use in OpenUI5
     // views and controllers.
-    // Generated on: 2020-06-14T05:44:05.162Z
+    //
+    // Generated using {@link https://www.npmjs.com/package/ui5-typescript-model-generator}
+    // on 2020-06-14T08:00:56.459Z
     //-----------------------------------------------------------------------------------
 
     /**
      * Data of model property /loading;
-     * boolean flag that will be true if this view is waiting for data to load
-     * @see HomeViewJSONModelData
+     * json object containing the loading flags on different instances
+     * @see EmployeeListViewJSONModelData
      */
-    public getDataLoading() : boolean {
+    public getDataLoading() : { pagination: boolean; all: boolean; } {
         return this.getProperty("/loading");
     }
 
     /**
      * Data of model property /loading;
-     * boolean flag that will be true if this view is waiting for data to load
-     * @see HomeViewJSONModelData
+     * json object containing the loading flags on different instances
+     * @see EmployeeListViewJSONModelData
      */
-    public setDataLoading(vValue:boolean) {
+    public setDataLoading(vValue:{ pagination: boolean; all: boolean; }) {
         this.setProperty("/loading", vValue);
     }
 
     /**
-     * Data of model property /numDigits;
-     *
-     * @see HomeViewJSONModelData
+     * Data of model property /loading/pagination;
+     * flag that becomes true if changing pages
+     * @see EmployeeListViewJSONModelData
      */
-    public getDataNumDigits() : Number {
-        return this.getProperty("/numDigits");
+    public getDataLoadingPagination() : boolean {
+        return this.getProperty("/loading/pagination");
     }
 
     /**
-     * Data of model property /numDigits;
-     *
-     * @see HomeViewJSONModelData
+     * Data of model property /loading/pagination;
+     * flag that becomes true if changing pages
+     * @see EmployeeListViewJSONModelData
      */
-    public setDataNumDigits(vValue:Number) {
-        this.setProperty("/numDigits", vValue);
+    public setDataLoadingPagination(vValue:boolean) {
+        this.setProperty("/loading/pagination", vValue);
     }
 
     /**
-     * Data of model property /maxNumbers;
-     *
-     * @see HomeViewJSONModelData
+     * Data of model property /loading/all;
+     * flag that becomes whenever any ajax call is made
+     * @see EmployeeListViewJSONModelData
      */
-    public getDataMaxNumbers() : Number {
-        return this.getProperty("/maxNumbers");
+    public getDataLoadingAll() : boolean {
+        return this.getProperty("/loading/all");
     }
 
     /**
-     * Data of model property /maxNumbers;
-     *
-     * @see HomeViewJSONModelData
+     * Data of model property /loading/all;
+     * flag that becomes whenever any ajax call is made
+     * @see EmployeeListViewJSONModelData
      */
-    public setDataMaxNumbers(vValue:Number) {
-        this.setProperty("/maxNumbers", vValue);
+    public setDataLoadingAll(vValue:boolean) {
+        this.setProperty("/loading/all", vValue);
     }
 
     /**
-     * Data of model property /result;
+     * Data of model property /employees;
      *
-     * @see HomeViewJSONModelData
+     * @see EmployeeListViewJSONModelData
      */
-    public getDataResult() : Number[] {
-        return this.getProperty("/result");
+    public getDataEmployees() : { firstName: string; lastName: string; userId: string; lastLoginDate: Date; emailAddresses: { email: string; type: "personal" | "work"; isPrimary: boolean; }[]; }[] {
+        return this.getProperty("/employees");
     }
 
     /**
-     * Data of model property /result;
+     * Data of model property /employees;
      *
-     * @see HomeViewJSONModelData
+     * @see EmployeeListViewJSONModelData
      */
-    public setDataResult(vValue:Number[]) {
-        this.setProperty("/result", vValue);
+    public setDataEmployees(vValue:{ firstName: string; lastName: string; userId: string; lastLoginDate: Date; emailAddresses: { email: string; type: "personal" | "work"; isPrimary: boolean; }[]; }[]) {
+        this.setProperty("/employees", vValue);
     }
 
     /**
-     * Data of model property /date;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public getDataDate() : Date {
-        return this.getProperty("/date");
-    }
-
-    /**
-     * Data of model property /date;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public setDataDate(vValue:Date) {
-        this.setProperty("/date", vValue);
-    }
-
-    /**
-     * Data of model property /multiLevelData;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public getDataMultiLevelData() : { key: string; obj: { num: number; str: string; }; valueList: { id: string; value: string; }[]; } {
-        return this.getProperty("/multiLevelData");
-    }
-
-    /**
-     * Data of model property /multiLevelData;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public setDataMultiLevelData(vValue:{ key: string; obj: { num: number; str: string; }; valueList: { id: string; value: string; }[]; }) {
-        this.setProperty("/multiLevelData", vValue);
-    }
-
-    /**
-     * Data of model property /multiLevelData/key;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public getDataMultiLevelDataKey() : string {
-        return this.getProperty("/multiLevelData/key");
-    }
-
-    /**
-     * Data of model property /multiLevelData/key;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public setDataMultiLevelDataKey(vValue:string) {
-        this.setProperty("/multiLevelData/key", vValue);
-    }
-
-    /**
-     * Data of model property /multiLevelData/obj;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public getDataMultiLevelDataObj() : { num: number; str: string; } {
-        return this.getProperty("/multiLevelData/obj");
-    }
-
-    /**
-     * Data of model property /multiLevelData/obj;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public setDataMultiLevelDataObj(vValue:{ num: number; str: string; }) {
-        this.setProperty("/multiLevelData/obj", vValue);
-    }
-
-    /**
-     * Data of model property /multiLevelData/obj/num;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public getDataMultiLevelDataObjNum() : number {
-        return this.getProperty("/multiLevelData/obj/num");
-    }
-
-    /**
-     * Data of model property /multiLevelData/obj/num;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public setDataMultiLevelDataObjNum(vValue:number) {
-        this.setProperty("/multiLevelData/obj/num", vValue);
-    }
-
-    /**
-     * Data of model property /multiLevelData/obj/str;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public getDataMultiLevelDataObjStr() : string {
-        return this.getProperty("/multiLevelData/obj/str");
-    }
-
-    /**
-     * Data of model property /multiLevelData/obj/str;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public setDataMultiLevelDataObjStr(vValue:string) {
-        this.setProperty("/multiLevelData/obj/str", vValue);
-    }
-
-    /**
-     * Data of model property /multiLevelData/valueList;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public getDataMultiLevelDataValueList() : { id: string; value: string; }[] {
-        return this.getProperty("/multiLevelData/valueList");
-    }
-
-    /**
-     * Data of model property /multiLevelData/valueList;
-     *
-     * @see HomeViewJSONModelData
-     */
-    public setDataMultiLevelDataValueList(vValue:{ id: string; value: string; }[]) {
-        this.setProperty("/multiLevelData/valueList", vValue);
-    }
-
-    /**
-     * Paths to each data entry to this model, each defined in HomeViewJSONModelData
+     * Paths to each data entry to this model, each defined in EmployeeListViewJSONModelData
      */
     public static path() {
         return {
-            /** @type {boolean} path to /loading; boolean flag that will be true if this view is waiting for data to load */
+            /** @type {{ pagination: boolean; all: boolean; }} path to /loading; json object containing the loading flags on different instances */
             loading: "/loading",
-            /** @type {Number} path to /numDigits;  */
-            numDigits: "/numDigits",
-            /** @type {Number} path to /maxNumbers;  */
-            maxNumbers: "/maxNumbers",
-            /** @type {Number[]} path to /result;  */
-            result: "/result",
-            /** @type {Date} path to /date;  */
-            date: "/date",
-            /** @type {{ key: string; obj: { num: number; str: string; }; valueList: { id: string; value: string; }[]; }} path to /multiLevelData;  */
-            multiLevelData: "/multiLevelData",
-            /** @type {string} path to /multiLevelData/key;  */
-            multiLevelData_key: "/multiLevelData/key",
-            /** @type {{ num: number; str: string; }} path to /multiLevelData/obj;  */
-            multiLevelData_obj: "/multiLevelData/obj",
-            /** @type {number} path to /multiLevelData/obj/num;  */
-            multiLevelData_obj_num: "/multiLevelData/obj/num",
-            /** @type {string} path to /multiLevelData/obj/str;  */
-            multiLevelData_obj_str: "/multiLevelData/obj/str",
-            /** @type {{ id: string; value: string; }[]} path to /multiLevelData/valueList;  */
-            multiLevelData_valueList: "/multiLevelData/valueList"
+            /** @type {boolean} path to /loading/pagination; flag that becomes true if changing pages */
+            loading_pagination: "/loading/pagination",
+            /** @type {boolean} path to /loading/all; flag that becomes whenever any ajax call is made */
+            loading_all: "/loading/all",
+            /** @type {{ firstName: string; lastName: string; userId: string; lastLoginDate: Date; emailAddresses: { email: string; type: "personal" | "work"; isPrimary: boolean; }[]; }[]} path to /employees;  */
+            employees: "/employees"
         };
     }
     /**
-     * Full paths to each data entry to this model, each defined in HomeViewJSONModelData
+     * Full paths to each data entry to this model, each defined in EmployeeListViewJSONModelData
      */
     public static fullpath() {
         return {
-            /** @type {boolean} path to /loading; boolean flag that will be true if this view is waiting for data to load */
+            /** @type {{ pagination: boolean; all: boolean; }} path to /loading; json object containing the loading flags on different instances */
             loading: "{/loading}",
-            /** @type {Number} path to /numDigits;  */
-            numDigits: "{/numDigits}",
-            /** @type {Number} path to /maxNumbers;  */
-            maxNumbers: "{/maxNumbers}",
-            /** @type {Number[]} path to /result;  */
-            result: "{/result}",
-            /** @type {Date} path to /date;  */
-            date: "{/date}",
-            /** @type {{ key: string; obj: { num: number; str: string; }; valueList: { id: string; value: string; }[]; }} path to /multiLevelData;  */
-            multiLevelData: "{/multiLevelData}",
-            /** @type {string} path to /multiLevelData/key;  */
-            multiLevelData_key: "{/multiLevelData/key}",
-            /** @type {{ num: number; str: string; }} path to /multiLevelData/obj;  */
-            multiLevelData_obj: "{/multiLevelData/obj}",
-            /** @type {number} path to /multiLevelData/obj/num;  */
-            multiLevelData_obj_num: "{/multiLevelData/obj/num}",
-            /** @type {string} path to /multiLevelData/obj/str;  */
-            multiLevelData_obj_str: "{/multiLevelData/obj/str}",
-            /** @type {{ id: string; value: string; }[]} path to /multiLevelData/valueList;  */
-            multiLevelData_valueList: "{/multiLevelData/valueList}"
+            /** @type {boolean} path to /loading/pagination; flag that becomes true if changing pages */
+            loading_pagination: "{/loading/pagination}",
+            /** @type {boolean} path to /loading/all; flag that becomes whenever any ajax call is made */
+            loading_all: "{/loading/all}",
+            /** @type {{ firstName: string; lastName: string; userId: string; lastLoginDate: Date; emailAddresses: { email: string; type: "personal" | "work"; isPrimary: boolean; }[]; }[]} path to /employees;  */
+            employees: "{/employees}"
+        };
+    }
+    /**
+     * Paths to each data entry to this model (EmployeeListViewJSONModelData) under the context of /employees[]
+     */
+    public static contextPathEmployees() {
+        return {
+            firstName: "firstName",
+            lastName: "lastName",
+            userId: "userId",
+            lastLoginDate: "lastLoginDate",
+            emailAddresses: "emailAddresses"
+        };
+    }
+    /**
+     * Paths to each data entry to this model (EmployeeListViewJSONModelData) under the context of /employees[]
+     */
+    public static fullContextPathEmployees() {
+        return {
+            firstName: "{firstName}",
+            lastName: "{lastName}",
+            userId: "{userId}",
+            lastLoginDate: "{lastLoginDate}",
+            emailAddresses: "{emailAddresses}"
+        };
+    }
+    /**
+     * Paths to each data entry to this model (EmployeeListViewJSONModelData) under the context of /employees[]/emailAddresses[]
+     */
+    public static contextPathEmployeesEmailAddresses() {
+        return {
+            email: "email",
+            type: "type",
+            isPrimary: "isPrimary"
+        };
+    }
+    /**
+     * Paths to each data entry to this model (EmployeeListViewJSONModelData) under the context of /employees[]/emailAddresses[]
+     */
+    public static fullContextPathEmployeesEmailAddresses() {
+        return {
+            email: "{email}",
+            type: "{type}",
+            isPrimary: "{isPrimary}"
         };
     }
 

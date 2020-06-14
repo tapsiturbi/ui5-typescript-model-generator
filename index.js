@@ -7,7 +7,6 @@ const ANCHOR_START = "//-- AUTO GENERATED (DO NOT EDIT BELOW) ---------------";
 const ANCHOR_END = "//-- END AUTO GENERATED (DO NOT EDIT ABOVE) -----------";
 
 
-
 /**
  * Parses the file and returns the generated code content and other info.
  *
@@ -36,11 +35,6 @@ const processFile = function(file, options) {
         // - get position of the last closing bracket (kind == CloseBraceToken) so the caller will know where
         //   to insert the code to
         if ( ts.isClassDeclaration(node) ) {
-            // console.log(node.name.text);
-            // console.log(sourceFile.getLineAndCharacterOfPosition(node.getStart()));
-            // console.log(getSyntaxKind(node));
-            // console.log(typeChecker.getSymbolAtLocation(node.name));
-
             let classInfo = getParentClassInfo(node, typeChecker);
 
             // if not expected, then log and skip
@@ -73,8 +67,6 @@ const processFile = function(file, options) {
             }
         });
 
-        // const base = options && options.base ? options.base : "";
-        // const relPath = path.relative(path.join(file.cwd, base), file.path);
         let fullContent = "";
 
         interfaces.forEach(interface => {
@@ -86,7 +78,9 @@ const processFile = function(file, options) {
             fullContent += `//-----------------------------------------------------------------------------------\n`;
             fullContent += `// Auto generated functions based from ${interface.name.text} for use in OpenUI5 \n`;
             fullContent += `// views and controllers. \n`;
-            fullContent += `// Generated on: ${new Date().toISOString()} \n`;
+            fullContent += `//\n`;
+            fullContent += `// Generated using {@link https://www.npmjs.com/package/ui5-typescript-model-generator} \n`;
+            fullContent += `// on ${new Date().toISOString()} \n`;
             fullContent += `//-----------------------------------------------------------------------------------\n\n`;
 
             // Getters and setters for each property
@@ -179,18 +173,33 @@ const parseMember = (member, parents, typeChecker, returnArray) => {
         returnArray = [];
     }
 
-    returnArray.push({
+    let returnResult = {
         name: member.name.text,
         parentPath: parentPath,
         kindName: getSyntaxKind(member.type.kind),
         type: prettyTypeName,
-        comments: jsDocComments
-    });
+        comments: jsDocComments,
+
+        contextMembers: [] // objects under array
+    };
+    returnArray.push(returnResult);
 
     if ( member.type.members ) {
         member.type.members.forEach(submember => {
             parseMember(submember, parents.concat(member), typeChecker, returnArray);
         });
+
+    } else if ( member.type.kind == ts.SyntaxKind.ArrayType && member.type.elementType.members ) {
+        // if array of complex objects,
+
+        // member.type.elementType.members
+        let subReturnArray = [];
+        member.type.elementType.members.forEach(arrMember => {
+            parseMember(arrMember, null, typeChecker, subReturnArray);
+        });
+
+        returnResult.contextMembers = subReturnArray;
+
     }
     return returnArray;
 };
@@ -221,6 +230,9 @@ const getJSDocComments = (node, typeChecker) => {
 const generatePathFunctions = (interface, arrTypes) => {
     let propList = [];
 
+    let contextContent = "";
+
+    // prepare paths into an array so that we can join them all later
     arrTypes.forEach(parsedType => {
         let fullName = parsedType.parentPath + "/" + parsedType.name;
         let prop = fullName.replace(/\//g, "_").replace(/^_/, "");
@@ -230,6 +242,12 @@ const generatePathFunctions = (interface, arrTypes) => {
             prop: prop,
             fullName: fullName
         });
+
+        if ( parsedType.contextMembers.length ) {
+            // console.log(parsedType.contextMembers);
+
+            contextContent += generateContextPathFunctions(interface, parsedType);
+        }
     });
 
     let fullContent = "";
@@ -248,8 +266,60 @@ const generatePathFunctions = (interface, arrTypes) => {
     fullContent += `${SPACER}return {\n${SPACER+SPACER}${propList.map(p => `${p.jsdoc}\n${SPACER+SPACER}${p.prop}: "{${p.fullName}}"` ).join(",\n"+SPACER+SPACER)} \n${SPACER}};`;
     fullContent += `\n}\n`; // closing of get fullpath()
 
+    fullContent += contextContent;
 
     return fullContent;
+};
+
+/**
+ * Returns the generated code for the contextPath<propertyName>() and
+ * fullContextPath<propertyName>() functions.
+ *
+ * @param {*} interface
+ * @param {*} arrTypes
+ */
+const generateContextPathFunctions = (interface, typeWithContextMembers, parents) => {
+
+    parents = parents || [];
+
+    let fullContent = "";
+
+    let fullPath = parents.map(type => type.parentPath + "/" + type.name).join("/") + typeWithContextMembers.parentPath + "/" + typeWithContextMembers.name;
+    const functionName = fullPath.split("/").map(s => toCamelCase(s)).join("");
+
+    // prepare paths into an array so that we can join them all later
+    let propList = [];
+    let subContextContent = "";
+    typeWithContextMembers.contextMembers.forEach(parsedType => {
+        propList.push(parsedType.name);
+
+        // if the contextMember also have another contextMember under it, then traverse
+        if ( parsedType.contextMembers.length ) {
+            subContextContent += generateContextPathFunctions(interface, parsedType, parents.concat(typeWithContextMembers));
+        }
+    });
+
+    // contextPath()
+    fullContent += `/**\n`;
+    fullContent += ` * Paths to each data entry to this model (${interface.name.text}) under the context of ${fullPath.replace(/\/([^\/]+)/g, "/$1[]")} \n`;
+    fullContent += ` */\n`;
+    fullContent += `public static contextPath${functionName}() {\n`;
+    fullContent += `${SPACER}return {\n${SPACER}${propList.map(p => `${SPACER}${p}: "${p}"` ).join(",\n"+SPACER)} \n${SPACER}};`;
+    fullContent += `\n}\n`;
+
+    // contextFullPath()
+    fullContent += `/**\n`;
+    fullContent += ` * Paths to each data entry to this model (${interface.name.text}) under the context of ${fullPath.replace(/\/([^\/]+)/g, "/$1[]")} \n`;
+    fullContent += ` */\n`;
+    fullContent += `public static fullContextPath${functionName}() {\n`;
+    fullContent += `${SPACER}return {\n${SPACER}${propList.map(p => `${SPACER}${p}: "{${p}}"` ).join(",\n"+SPACER)} \n${SPACER}};`;
+    fullContent += `\n}\n`;
+
+    fullContent += subContextContent;
+
+    return fullContent;
+
+
 };
 
 /**
@@ -260,12 +330,6 @@ const generatePathFunctions = (interface, arrTypes) => {
  * @param {*} arrTypes
  */
 const generateGettersAndSetters = (interface, arrTypes) => {
-    // name: member.name.text,
-    // parentPath: parentPath,
-    // kindName: getSyntaxKind(member.type.kind),
-    // type: prettyTypeName,
-    // comments: jsDocComments
-
     let fullContent = "";
 
     arrTypes.forEach(parsedType => {
