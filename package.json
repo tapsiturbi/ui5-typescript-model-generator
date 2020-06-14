@@ -1,0 +1,19 @@
+{
+  "name": "ui5-typescript-model-generator",
+  "version": "1.0.0",
+  "description": "Gulp task that generates typescript code for SAPUI5/OpenUI5 model classes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tapsiturbi/ui5-typescript-model-generator.git"
+  },
+  "author": "Levy Bajamundi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tapsiturbi/ui5-typescript-model-generator/issues"
+  },
+  "homepage": "https://github.com/tapsiturbi/ui5-typescript-model-generator#readme"
+}
